@@ -55,7 +55,7 @@ public class AuthenticationService {
 
 	   else if(resp.getStatusCode().value() == 400|| resp.getStatusCode().value() == 401){
 		failedLogin++;
-		throw new Exception("Authentication failed: Invalid username or password");
+		throw new Exception();
 	   }
 
 	}
@@ -83,7 +83,7 @@ public class AuthenticationService {
 				break;
 		}
 
-    return num1 + " " + opStr + " " + num2 + " =";
+    return "what is " + num1 + " " + opStr + " " + num2 + " ?";
 	}
 
 	public int generateCaptchaAnswer(String problem){

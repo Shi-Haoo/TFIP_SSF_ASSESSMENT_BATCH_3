@@ -40,15 +40,15 @@
 			<tr>
 				<td data-th-text="${captcha}"></td>
 			</tr>
-			<tr>
+			<tr data-th-if="${failedLogin > 0}">
 				<td>
 					<label for="answer">Answer:</label>
 				</td>
 				<td>
-					<input type="text" id="answer" size="30" placeholder="Answer">
+					<input type="text" id="answer" name="userAns" size="30" placeholder="Answer">
 				</td>
 			</tr>
-			<tr data-th-f="${errorMessage}">
+			<tr data-th-if="${errorMessage}">
 				<td data-th-text="${errorMessage}"></td>
 			</tr>
 			<tr>

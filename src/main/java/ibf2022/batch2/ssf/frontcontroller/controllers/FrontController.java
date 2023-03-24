@@ -3,9 +3,11 @@ package ibf2022.batch2.ssf.frontcontroller.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -34,29 +36,31 @@ public class FrontController {
 	}
 
 	@PostMapping(path="/login")
-	public String postLogin(Model model, @RequestParam String userAns, @Valid Login login, BindingResult binding) throws Exception{
+	public String postLogin(Model model, @RequestBody MultiValueMap<String,String> userAns, @Valid Login login, BindingResult binding) throws Exception{
 		
 		if(binding.hasErrors()){
 			return "view0";
 		}
 
+		String ans = userAns.getFirst("userAns");
 		String qn = aSvc.generateMathQn();
-
-		if(aSvc.failedLogin > 0){
+		int failedLogin = aSvc.failedLogin;
+		if(failedLogin > 0){
 			aSvc.generateCaptchaAnswer(qn);
-			if(!aSvc.compareAns(Integer.parseInt(userAns))){
+			if(!aSvc.compareAns(Integer.parseInt(ans))){
 				model.addAttribute("captcha", qn);
 				model.addAttribute("errorMessage", "incorrect captcha answer!");
 				return "view0";
 			}
-			
+			model.addAttribute("failedLogin", failedLogin);
 		}
 
 		try{
 			aSvc.authenticate(login.getUsername(), login.getPassword());
 		}catch(Exception ex){
+			
 			model.addAttribute("captcha", qn);
-			model.addAttribute("errorMsg", ex.getMessage());
+			model.addAttribute("errorMsg", "invalid username/password"); //ex.getMessage());
 			return "view0";
 		}
 		
