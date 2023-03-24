@@ -20,5 +20,9 @@ public class AuthenticationRepository {
 		String key = username;
 		String value = "true";
 		template.opsForValue().set(key, value,Duration.ofMinutes(30));
-		} 
+		}
+		
+	public String checkDisable(String username){
+		return template.opsForValue().get(username);
+	}
 }

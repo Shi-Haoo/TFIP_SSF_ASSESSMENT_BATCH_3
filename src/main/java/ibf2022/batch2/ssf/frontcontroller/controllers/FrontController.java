@@ -55,7 +55,7 @@ public class FrontController {
 			model.addAttribute("failedLogin", failedLogin);
 		}
 
-		if(failedLogin == 3){
+		if(failedLogin == 3 || aSvc.isLocked(login.getUsername())){
 			aSvc.disableUser(login.getUsername());
 			return "view2";
 		}
