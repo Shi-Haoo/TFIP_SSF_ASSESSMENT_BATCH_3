@@ -1,11 +1,14 @@
 package ibf2022.batch2.ssf.frontcontroller.services;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -15,8 +18,11 @@ public class AuthenticationService {
 	// TODO: Task 2
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write the authentication method in here
-
+	@Autowired
+    private HttpSession session;
+	
 	private static final String url = "https://auth.chuklee.com";
+	private int failedLogin = 0;
 
 	public void authenticate(String username, String password) throws Exception {
 
@@ -37,6 +43,15 @@ public class AuthenticationService {
 			resp = template.exchange(req, String.class);
 	   } catch(Exception ex){
 		   throw ex;
+	   }
+
+	   if (resp.getStatusCode().value() == 201) {
+		String authenticatedUser = resp.getBody().substring("Authenticated".length());
+		session.setAttribute("authenticatedUser", authenticatedUser);
+	   }
+
+	   else if(resp.getStatusCode().value() == 400|| resp.getStatusCode().value() == 401){
+		failedLogin++;
 	   }
 
 	}
