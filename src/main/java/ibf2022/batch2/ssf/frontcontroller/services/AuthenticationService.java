@@ -52,6 +52,7 @@ public class AuthenticationService {
 
 	   else if(resp.getStatusCode().value() == 400|| resp.getStatusCode().value() == 401){
 		failedLogin++;
+		throw new Exception("Authentication failed: Invalid username or password");
 	   }
 
 	}

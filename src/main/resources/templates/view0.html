@@ -45,5 +45,8 @@
 			</tr>
 		</table>
 	</form>
+	<div data-th-if="${errorMsg}">
+		<p style="color: red;" data-th-text="${errorMsg}"></p>
+	</div>
 	</body>
 </html>

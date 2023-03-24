@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import ibf2022.batch2.ssf.frontcontroller.model.Login;
 import ibf2022.batch2.ssf.frontcontroller.services.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -20,6 +21,9 @@ public class FrontController {
 
 	@Autowired
 	AuthenticationService aSvc;
+
+	@Autowired
+    private HttpServletRequest req;
 
 	@GetMapping(path="/")
 	public String getLoginPg(Model model){
@@ -35,8 +39,19 @@ public class FrontController {
 			return "view0";
 		}
 
-		aSvc.authenticate(login.getUsername(), login.getPassword());
+		try{
+			aSvc.authenticate(login.getUsername(), login.getPassword());
+		}catch(Exception ex){
+			model.addAttribute("errorMsg", ex.getMessage());
+			return "view0";
+		}
+		
+		String authenticatedUser = (String) req.getSession().getAttribute("authenticatedUser");
 
+		if(login.getUsername().equals(authenticatedUser))
+		return "redirect: /protected/view1.html";
+		
+		
 		return "";
 	}
 	
