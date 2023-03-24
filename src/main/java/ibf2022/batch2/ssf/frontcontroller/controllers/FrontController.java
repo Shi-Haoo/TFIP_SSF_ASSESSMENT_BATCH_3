@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ibf2022.batch2.ssf.frontcontroller.model.Login;
 import ibf2022.batch2.ssf.frontcontroller.services.AuthenticationService;
@@ -33,15 +34,27 @@ public class FrontController {
 	}
 
 	@PostMapping(path="/login")
-	public String postLogin(Model model, @Valid Login login, BindingResult binding) throws Exception{
+	public String postLogin(Model model, @RequestParam String userAns, @Valid Login login, BindingResult binding) throws Exception{
 		
 		if(binding.hasErrors()){
 			return "view0";
 		}
 
+		String qn = aSvc.generateMathQn();
+
+		if(aSvc.failedLogin > 0){
+			aSvc.generateCaptchaAnswer(qn);
+			if(!aSvc.compareAns(Integer.parseInt(userAns))){
+				model.addAttribute("captcha", qn);
+				return "view0";
+			}
+			
+		}
+
 		try{
 			aSvc.authenticate(login.getUsername(), login.getPassword());
 		}catch(Exception ex){
+			model.addAttribute("captcha", qn);
 			model.addAttribute("errorMsg", ex.getMessage());
 			return "view0";
 		}
@@ -52,7 +65,7 @@ public class FrontController {
 		return "redirect: /protected/view1.html";
 		
 		
-		return "";
+		return "view0";
 	}
 	
 }
