@@ -45,7 +45,7 @@ public class FrontController {
 		String ans = userAns.getFirst("userAns");
 		String qn = aSvc.generateMathQn();
 		int failedLogin = aSvc.failedLogin;
-		if(failedLogin > 0){
+		if(failedLogin > 0 && failedLogin < 3){
 			aSvc.generateCaptchaAnswer(qn);
 			if(!aSvc.compareAns(Integer.parseInt(ans))){
 				model.addAttribute("captcha", qn);
@@ -53,6 +53,10 @@ public class FrontController {
 				return "view0";
 			}
 			model.addAttribute("failedLogin", failedLogin);
+		}
+
+		if(failedLogin == 3){
+			aSvc.disableUser(login.getUsername());
 		}
 
 		try{

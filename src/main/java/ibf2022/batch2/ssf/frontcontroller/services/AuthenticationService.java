@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import ibf2022.batch2.ssf.frontcontroller.respositories.AuthenticationRepository;
 import jakarta.servlet.http.HttpSession;
 
 
@@ -22,6 +23,9 @@ public class AuthenticationService {
 	// Write the authentication method in here
 	@Autowired
     private HttpSession session;
+
+	@Autowired
+	AuthenticationRepository repo;
 	
 	private static final String url = "https://auth.chuklee.com";
 	public int failedLogin = 0;
@@ -132,6 +136,9 @@ public class AuthenticationService {
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write an implementation to disable a user account for 30 mins
 	public void disableUser(String username) {
+
+		repo.disableUser(username);
+
 	}
 
 	// TODO: Task 5
