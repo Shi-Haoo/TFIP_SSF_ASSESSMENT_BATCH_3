@@ -38,6 +38,20 @@
 				</td>
 			</tr>
 			<tr>
+				<td data-th-text="${captcha}"></td>
+			</tr>
+			<tr>
+				<td>
+					<label for="answer">Answer:</label>
+				</td>
+				<td>
+					<input type="text" id="answer" size="30" placeholder="Answer">
+				</td>
+			</tr>
+			<tr data-th-f="${errorMessage}">
+				<td data-th-text="${errorMessage}"></td>
+			</tr>
+			<tr>
 				<td></td>
 				<td>
 					<button type =submit>Login</button>

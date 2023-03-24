@@ -46,6 +46,7 @@ public class FrontController {
 			aSvc.generateCaptchaAnswer(qn);
 			if(!aSvc.compareAns(Integer.parseInt(userAns))){
 				model.addAttribute("captcha", qn);
+				model.addAttribute("errorMessage", "incorrect captcha answer!");
 				return "view0";
 			}
 			
