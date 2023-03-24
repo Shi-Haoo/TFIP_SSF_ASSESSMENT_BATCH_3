@@ -57,6 +57,7 @@ public class FrontController {
 
 		if(failedLogin == 3){
 			aSvc.disableUser(login.getUsername());
+			return "view2";
 		}
 
 		try{
